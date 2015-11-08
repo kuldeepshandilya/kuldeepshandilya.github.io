@@ -1,0 +1,120 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Sports Channel</title>
+<link rel="stylesheet"
+	href="http://code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css">
+<script src="http://code.jquery.com/jquery-1.10.2.js"></script>
+<script src="http://code.jquery.com/ui/1.11.4/jquery-ui.js"></script>
+<style>
+#recommend {
+	width: 200px;
+	height: 400px;
+}
+
+#tabs {
+border-color: maroon;
+height: 550px;
+}
+ul, li {
+	list-style:square;
+	list-style-image:none;
+}
+#footer {
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+  height: 30px;
+  background-color: #f5f5f5;
+}
+</style>
+<script>
+	$(function() {
+		$("#tabs").tabs();
+	});
+
+	$(function() {
+		$("#recommend").draggable();
+	});
+</script>
+
+</head>
+<body bgcolor="white">
+	<img src="mychannel.jpg" alt="Sports Channel"
+		style="width: 804px; height: 128px;">
+	
+	<div id="tabs">
+		<ul>
+			<li><a href="#homeTab">Home</a></li>
+			<li><a href="#cricketTab">Cricket</a></li>
+			<li><a href="#tennisTab">Tennis</a></li>
+			<li><a href="#footBallTab">Foot Ball</a></li>
+			<li><a href="#baseBallTab">Base Ball</a></li>
+			<li><a href="#basketBallTab">Basket Ball</a></li>
+			<li><a href="#hockeyTab">Hockey</a></li>
+
+		</ul>
+		<div id="homeTab">
+			<ul>
+			<li>
+			<p>Sky Sports News TOTH - 9pm - Wednesday 15th January 2014</p>
+			<iframe width="560" height="315" src="https://www.youtube.com/embed/N0kWrhkwA8Q" frameborder="0" allowfullscreen></iframe>
+			</li>
+			</ul>
+			
+			
+			
+			
+			<div id="recommend" class="ui-widget-content" align="right">
+				<ul >
+					<li><p>
+							<img src="shoes.jpg" alt="Recommendations"
+								style="width: 104px; height: 50px;">
+						</p></li>
+					<li><p>
+							<img src="balls.jpg" alt="Recommendations"
+								style="width: 104px; height: 50px;">
+						</p></li>
+					<li><p>Recommend 3</li>
+				</ul>
+			</div>
+		</div>
+		<div id="cricketTab">
+			<ul>
+			<li>
+			<p>10 Players to Watch in ICC Cricket World Cup 2015</p>
+			<iframe width="560" height="315" src="https://www.youtube.com/embed/5mmb66YMU_g" frameborder="0" allowfullscreen></iframe>
+			</li>
+			</ul>
+		</div>
+		<div id="tennisTab">
+			<p>I am in Tennis.</p>
+		</div>
+		<div id="footBallTab">
+			<ul>
+			<li>
+			<p>FINAL HIGHLIGHTS: USA v. Japan - FIFA Women's World Cup 2015</p>
+			<iframe width="560" height="315" src="https://www.youtube.com/embed/MCG2ycuoOg4" frameborder="0" allowfullscreen></iframe>
+			</li>
+			</ul>
+		</div>
+		<div id="baseBallTab">
+			<p>I am in BaseBall.</p>
+		</div>
+		<div id="basketBallTab">
+			<p>	<img src="basket.jpg" alt="Sports Channel"
+		style="width: 304px; height: 128px;"></p>
+			
+		</div>
+		<div id="hockeyTab">
+			<p>I am in Hockey.</p>
+		</div>
+	</div>
+</body>
+<footer>
+<p align="center">Sports Channel</p>
+	<img src="mychannel.jpg" alt="Sports Channel"
+		style="width: 804px; height: 128px;">
+</footer>
+</html>
