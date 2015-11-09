@@ -4,88 +4,236 @@
 <meta charset="utf-8">
 <title>Sports Channel</title>
 <link rel="stylesheet"
-	href="http://code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css">
+	href="http://code.jquery.com/ui/1.11.4/themes/blitzer/jquery-ui.css">
 <script src="http://code.jquery.com/jquery-1.10.2.js"></script>
 <script src="http://code.jquery.com/ui/1.11.4/jquery-ui.js"></script>
+<script src="jsAPI.js"></script>
 <style>
 #recommend {
-	width: 200px;
+	width: 180px;
 	height: 400px;
 }
 
 #tabs {
-border-color: maroon;
-height: 550px;
+	border-color: maroon;
+	height: 520px;
+	font-size: small;
+	
 }
+
+
 ul, li {
-	list-style:square;
-	list-style-image:none;
+	list-style: square;
+	list-style-image: none;
 }
+
+#header {
+    background-color:#800000 ;
+    color:white;
+    text-align:left;
+    padding:0px;
+}
+
 #footer {
-  position: absolute;
-  bottom: 0;
-  width: 100%;
-  height: 30px;
-  background-color: #f5f5f5;
+    background-color:#800000;
+    color:white;
+    clear:both;
+    text-align:center;
+    padding:5px;	 	 
 }
 </style>
+
 <script>
+var sportsInterested='none';
+var maxRecommend=4;
+var recommendations=["none"];
+var categories=["none"];
+
+
+        //Initialize bluekai
+        var bkClient = new com.oracle.bluekai.Client(14455,1);
+
+        bkClient.init(function(userCampaigns){console.log(userCampaigns);
+        for(i in userCampaigns){
+        console.log(i);
+        for(j in userCampaigns[i])
+        {
+        console.log(userCampaigns[i][j]);
+        if(userCampaigns[i][j]==3049) {
+        	if(categories.indexOf('cricket') ==-1) {
+        categories.push('cricket'); }
+        }
+        if(userCampaigns[i][j]==136) {
+        if(categories.indexOf('tennis') ==-1) {
+        	categories.push('tennis');
+        	}
+        }
+        }
+        }
+        });
+
+        //to post data use the following function
+        /*bkClient.postUserData({
+	    "key1" : "value1",
+	    "key2" : "value2"
+        });*/
+
 	$(function() {
 		$("#tabs").tabs();
 	});
+	
+	
+	function getSelectedTab(tabId) {
+		sportsInterested=tabId;
+		if(sportsInterested!='none')
+		{
+		//var output = document.getElementById('output');
+		//output.innerHTML = 'I am interested in '+tabId+' Sports';
+		setRecommendations(sportsInterested);
+		}
+	}
+	
+	function setRecommendations(interest) {
+	
+	if(recommendations.length < maxRecommend ) {
+	// Add to connect BlueKai
+	// Get visitor/user recommendations , accordingly calculate the sports in Interest
+	for (i in categories) {
+	imageReveal(categories[i]);
+	console.log ('Items:'+categories[i]);
+	}
+		imageReveal(interest);
+	}
+	
+	
+	}
+	
+	function imageReveal(sports) {
+                var ul = document.getElementById("listItUp");
+                if(sports=='cricket') {
+                addImage('shoes.jpg',ul);
+                addImage('cricketbat.jpg',ul);
+                }
+                if(sports=='tennis') {
+                addImage('shoes.jpg',ul);
+                addImage('tennisracquet.jpg',ul);
+                }
+         }
+        
+        function addImage(image,ul) {
+        if(recommendations.indexOf(image) ==-1) {
+	        var li = document.createElement("li");
+	        li.innerHTML = "<img src="+image+" alt="+ image +" style='width: 80px; height: 70px;'"+" />";
+	        ul.appendChild(li);
+	        recommendations.push(image);
+        }
+        }
 
-	$(function() {
-		$("#recommend").draggable();
-	});
 </script>
 
 </head>
-<body bgcolor="white">
-	<img src="mychannel.jpg" alt="Sports Channel"
-		style="width: 804px; height: 128px;">
+<body>
+<div id="header">
+<table>
+<tr>
+<td width="504px" height="108px">
+	<img src="banner.jpg" alt="Sports Channel"
+		style="width: 504px; height: 108px;">
+</td>
+<td width="900px" align="center">	
+	<marquee behavior="scroll" direction="up" scrollamount="2" height="108"
+		width="300">
+		<img src="channelname.jpg" alt="New Channel" style="width: 104px;"
+			align="middle">
+		<p>Get Latest Sports News...</p>
+		<ul>
+			<li><a href="http://www.espncricinfo.com/">ESPN</a></li>
+			<li><a href="http://www.foxsports.com/">Fox Sports</a></li>
+			<li><a href="http://btn.com/sports/">Big Ten Network</a></li>
+			<li><a href="http://watch.nba.com/">NBA TV</a></li>
+			<li><a href="http://www.theskichannel.com/">The Ski Channel</a></li>
+			<li><a href="http://universalsports.com/">Universal Sports</a></li>
+			<li><a href="http://www.starsports.com/">Star Sports</a></li>
+		</ul>
+	</marquee></td>
+<td align="right">		<marquee scrollamount="6" behavior="alternate" direction="right"
+		height="108" width="300">
+		<img src="basket.jpg" alt="Basket Ball"
+			style="width: 290px; height: 108px;"> <img src="cricket.jpg"
+			alt="Cricket" style="width: 290px; height: 108px;"> <img
+			src="football.jpg" alt="Foot Ball"
+			style="width: 290px; height: 108px;"> <img src="soccer.jpg"
+			alt="Soccer Ball" style="width: 290px; height: 108px;"> <img
+			src="pond-skim.jpg" alt="Pond Skim"
+			style="width: 290px; height: 108px;"> <img src="freeride.jpg"
+			alt="Freeride" style="width: 290px; height: 108px;">
+	</marquee></td>
+</tr>
+</table>
+
+
+
+
 	
+
+	</div>
+
 	<div id="tabs">
 		<ul>
-			<li><a href="#homeTab">Home</a></li>
-			<li><a href="#cricketTab">Cricket</a></li>
-			<li><a href="#tennisTab">Tennis</a></li>
-			<li><a href="#footBallTab">Foot Ball</a></li>
-			<li><a href="#baseBallTab">Base Ball</a></li>
-			<li><a href="#basketBallTab">Basket Ball</a></li>
-			<li><a href="#hockeyTab">Hockey</a></li>
+			<li><a href="#homeTab" onclick="getSelectedTab('none')">Home</a></li>
+			<li><a href="#cricketTab" onclick="getSelectedTab('cricket')">Cricket</a></li>
+			<li><a href="#tennisTab" onclick="getSelectedTab('tennis')">Tennis</a></li>
+			<li><a href="#footBallTab" onclick="getSelectedTab('football')">Football</a></li>
+			<li><a href="#baseBallTab" onclick="getSelectedTab('baseball')">Baseball</a></li>
+			<li><a href="#basketBallTab" onclick="getSelectedTab('basketball')">Basketball</a></li>
+			<li><a href="#hockeyTab" onclick="getSelectedTab('hockey')">Hockey</a></li>
+			<li><a href="#volleyBallTab" onclick="getSelectedTab('volleyball')">Volleyball</a></li>
+			<li><a href="#boxingTab" onclick="getSelectedTab('boxing')">Boxing</a></li>
+			<li><a href="#badmintonTab" onclick="getSelectedTab('badminton')">Badminton</a></li>
+			<li><a href="#golfTab" onclick="getSelectedTab('golf')">Golf</a></li>
+			<li><a href="#cyclingTab" onclick="getSelectedTab('cycling')">Cycling</a></li>
+			<li><a href="#athleticsTab" onclick="getSelectedTab('athletics')">Athletics</a></li>
+			<li><a href="#othersTab" onclick="getSelectedTab('none')">Others</a></li>
 
 		</ul>
+
 		<div id="homeTab">
-			<ul>
-			<li>
-			<p>Sky Sports News TOTH - 9pm - Wednesday 15th January 2014</p>
-			<iframe width="560" height="315" src="https://www.youtube.com/embed/N0kWrhkwA8Q" frameborder="0" allowfullscreen></iframe>
-			</li>
-			</ul>
-			
-			
-			
-			
-			<div id="recommend" class="ui-widget-content" align="right">
-				<ul >
-					<li><p>
-							<img src="shoes.jpg" alt="Recommendations"
-								style="width: 104px; height: 50px;">
-						</p></li>
-					<li><p>
-							<img src="balls.jpg" alt="Recommendations"
-								style="width: 104px; height: 50px;">
-						</p></li>
-					<li><p>Recommend 3</li>
-				</ul>
-			</div>
+			<table>
+				<tr>
+					<th align="left" width="1020px">Headline News</th>
+					<th align="right" width="400px">Recommendations</th>
+				</tr>
+				<tr>
+					<td width="400px"><ul>
+							<li>Sky Sports News TOTH - 9pm - Wednesday 15th January 2014
+								<br> <iframe width="560" height="315"
+									src="https://www.youtube.com/embed/N0kWrhkwA8Q" frameborder="0"
+									allowfullscreen></iframe>
+
+							</li>
+						</ul></td>
+
+					<td width="400px" align="right">
+						<div id="recommend" class="ui-widget-content" align="right" >
+						<ul id="listItUp"></ul>
+						
+						
+						</div>
+					</td>
+				</tr>
+			</table>
+
+
+
 		</div>
 		<div id="cricketTab">
 			<ul>
-			<li>
-			<p>10 Players to Watch in ICC Cricket World Cup 2015</p>
-			<iframe width="560" height="315" src="https://www.youtube.com/embed/5mmb66YMU_g" frameborder="0" allowfullscreen></iframe>
-			</li>
+				<li>
+					<p>10 Players to Watch in ICC Cricket World Cup 2015</p> <iframe
+						width="560" height="315"
+						src="https://www.youtube.com/embed/5mmb66YMU_g" frameborder="0"
+						allowfullscreen></iframe>
+				</li>
 			</ul>
 		</div>
 		<div id="tennisTab">
@@ -93,28 +241,53 @@ ul, li {
 		</div>
 		<div id="footBallTab">
 			<ul>
-			<li>
-			<p>FINAL HIGHLIGHTS: USA v. Japan - FIFA Women's World Cup 2015</p>
-			<iframe width="560" height="315" src="https://www.youtube.com/embed/MCG2ycuoOg4" frameborder="0" allowfullscreen></iframe>
-			</li>
+				<li>
+					<p>FINAL HIGHLIGHTS: USA v. Japan - FIFA Women's World Cup 2015</p>
+					<iframe width="560" height="315"
+						src="https://www.youtube.com/embed/MCG2ycuoOg4" frameborder="0"
+						allowfullscreen></iframe>
+				</li>
 			</ul>
 		</div>
 		<div id="baseBallTab">
 			<p>I am in BaseBall.</p>
 		</div>
 		<div id="basketBallTab">
-			<p>	<img src="basket.jpg" alt="Sports Channel"
-		style="width: 304px; height: 128px;"></p>
-			
+			<p>
+				<img src="basket.jpg" alt="Sports Channel"
+					style="width: 304px; height: 128px;">
+			</p>
+
 		</div>
 		<div id="hockeyTab">
 			<p>I am in Hockey.</p>
 		</div>
+		<div id="volleyBallTab">
+			<p>I am in Volley Ball.</p>
+		</div>
+		<div id="boxingTab">
+			<p>I am in Boxing.</p>
+		</div>
+		<div id="badmintonTab">
+			<p>I am in Badminton.</p>
+		</div>
+		<div id="golfTab">
+			<p>I am in Golf.</p>
+		</div>
+		<div id="cyclingTab">
+			<p>I am in Cycling.</p>
+		</div>
+		<div id="athleticsTab">
+			<p>I am in Athletics.</p>
+		</div>
+		<div id="othersTab">
+			<p>I am in Others.</p>
+		</div>
 	</div>
+	
+	<div id="footer">
+Copyright © SportsChannel.com
+</div>
 </body>
-<footer>
-<p align="center">Sports Channel</p>
-	<img src="mychannel.jpg" alt="Sports Channel"
-		style="width: 804px; height: 128px;">
-</footer>
+
 </html>
