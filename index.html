@@ -68,15 +68,12 @@ bkClient.postUserData("");
 // fetch user data
 bkClient.getUserData(function(userCampaigns) {
 var recommendedArticles;
-    console.log(userCampaigns);
 
     if (null != userCampaigns[82058]) {
         console.log('We are in india');
      		   if(countries.indexOf('india') ==-1) {
      		   	countries.push('india');
-     		   	console.log('Country added:india');
      		   	recommendedArticles = setRecommendations('india');
-     		   	//call drawRecommendation passing in recomendation divid
         	}
        
     } else if (null != userCampaigns[82557]) {
@@ -86,11 +83,8 @@ var recommendedArticles;
         console.log('Default is India!!!!');
         recommendedArticles = setRecommendations('india');
     }
-//call drawRecommendation passing in 'recommendedArticles' and recomendation divid
 drawRecommendations(recommendedArticles, 'newsList','home_output');
 });
-
-
 
 	$(function() {
 		$("#tabs").tabs();
@@ -115,12 +109,10 @@ drawRecommendations(recommendedArticles, 'newsList','home_output');
 	}
 	        
 	for (i in articles) {
-	console.log (articles[i]);
 	var articleId=tabId+index;
 	var articleLink="#"+articleId;
 
 	var li = document.createElement("li");
-	console.log("Output Type="+output);
 	li.innerHTML = "<a href=" +articleLink+ " data-toggle=collapse>"+articles[i].title+"</a> 	<div id="+articleId+" class=collapse> 	<table>	<tr><td width='200px' align='left'><img src="+articles[i].image+" alt="+ articles[i].image +" style='width: 180px; height: 170px;'"+" /></td>	<td width='800px' align='top'>"+articles[i].text+"</td>	</tr>	<tr><br></tr>	<tr>		<td>Author</td>	<td><i>"+articles[i].author+"</td>		</tr>	<tr>		<td>Date Published</td>	<td><i>"+articles[i].date+"</td>		</tr>	</table>		</div>";
 	ul.appendChild(li);
 	index=index+1;
@@ -135,16 +127,23 @@ drawRecommendations(recommendedArticles, 'newsList','home_output');
 		
  	}
  	
- 	function matchTags(tag,articles,recommendList) {
- 				for (i in articles) {
-			tags=articles[i].tags;
-			console.log (articles[i]);
-			console.log ("Tags:"+tags[0]);
-				if(tag==tags[0]) {
-				recommendList.push(articles[i]);
-				
+/**
+interest = user attribute say 'usa' or 'india'
+artcles - one of the 5 arrays - cricketArticles etc
+recommendedList - list into which recommendations to append to
+
+*/
+ 	function matchTags(interest,articles,recommendList) {
+ 				for (article in articles) {
+			var tags=article.tags;
+			for(tag in tags) {
+				if(tag == interest){
+					recommendList.push(article);
+					break;
+				  }
 				}
 	}
+ 				
  	return recommendList;
  	}
  	/**
@@ -182,8 +181,6 @@ drawRecommendations(recommendedArticles, 'newsList','home_output');
 		var ul = document.getElementById(divId);
 		addEmptyLine(ul);
 		for (i in recommendedArticles) {
-			console.log ('Recommended Articles:'+recommendedArticles[i].title);
-			console.log ('Tag Articles:'+recommendedArticles[i].tags[0]);
 			addArticle(recommendedArticles[i],ul,displayDivId);
 			addEmptyLine(ul);
 		}
@@ -224,35 +221,7 @@ var li = document.createElement("li");
 		style="width: 504px; height: 108px;">
 </td>
 <td width="900px" align="center">	
-<!--  
-	<marquee behavior="scroll" direction="up" scrollamount="2" height="108"
-		width="300">
-		<img src="channelname.jpg" alt="New Channel" style="width: 104px;"
-			align="middle">
-		<p>Get Latest Sports News...</p>
-		<ul>
-			<li><a href="http://www.espncricinfo.com/">ESPN</a></li>
-			<li><a href="http://www.foxsports.com/">Fox Sports</a></li>
-			<li><a href="http://btn.com/sports/">Big Ten Network</a></li>
-			<li><a href="http://watch.nba.com/">NBA TV</a></li>
-			<li><a href="http://www.theskichannel.com/">The Ski Channel</a></li>
-			<li><a href="http://universalsports.com/">Universal Sports</a></li>
-			<li><a href="http://www.starsports.com/">Star Sports</a></li>
-		</ul>
-	</marquee></td>
-<td align="right">		<marquee scrollamount="6" behavior="alternate" direction="right"
-		height="108" width="300">
-		<img src="basket.jpg" alt="Basket Ball"
-			style="width: 290px; height: 108px;"> <img src="cricket.jpg"
-			alt="Cricket" style="width: 290px; height: 108px;"> <img
-			src="football.jpg" alt="Foot Ball"
-			style="width: 290px; height: 108px;"> <img src="soccer.jpg"
-			alt="Soccer Ball" style="width: 290px; height: 108px;"> <img
-			src="pond-skim.jpg" alt="Pond Skim"
-			style="width: 290px; height: 108px;"> <img src="freeride.jpg"
-			alt="Freeride" style="width: 290px; height: 108px;">
-	</marquee>
-	--></td>
+</td>
 </tr>
 </table>
 
