@@ -134,11 +134,11 @@ recommendedList - list into which recommendations to append to
 
 */
  	function matchTags(interest,articles,recommendList) {
- 				for (article in articles) {
-			var tags=article.tags;
-			for(tag in tags) {
-				if(tag == interest){
-					recommendList.push(article);
+ 				for (index in articles) {
+			var tags=articles[index].tags;
+			for(tagindex in tags) {
+				if(tags[tagindex] == interest){
+					recommendList.push(articles[index]);
 					break;
 				  }
 				}
