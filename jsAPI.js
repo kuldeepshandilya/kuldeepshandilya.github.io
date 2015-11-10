@@ -14,30 +14,43 @@ com.oracle.bluekai = {
 		var userCampaigns = {};
 		var siteId = siteId;
 		var limit = limit;
+		var bkputLoaded = false;
 
 		/**
 		 * Initialize bluekai APIs i.e. Use js API to fetch current campaigns
 		 * for the user Load the bk-coretag.js to post user data later on.
 		 * Execute callback function with fetched user campaigns.
 		 * 
-		 * @param onLoad :
+		 */
+		var init = function() {
+
+			createScript('bkput', 'http://tags.bkrtx.com/js/bk-coretag.js',
+					function() {
+						bkputLoaded = true;
+					});
+		}
+
+		/**
+		 * @param callback :
 		 *            A callback function to execute after fetching user
 		 *            campaigns. The function will receive a map object
 		 *            containing campaigns and relative categories.
 		 */
-		this.init = function(onLoad) {
-			createScript('http://tags.bluekai.com/site/' + siteId + '?ret=js',
-					function() {
-						populateUserCampaigns();
-						onLoad(userCampaigns);
-					});
+		this.getUserData = function(callback) {
 
-			createScript('http://tags.bkrtx.com/js/bk-coretag.js', null);
+			createScript('bkget', 'http://tags.bluekai.com/site/' + siteId
+					+ '?ret=js', function() {
+				populateUserCampaigns();
+				callback(userCampaigns);
+			});
 		}
 
-		var createScript = function(src, onLoad) {
+		var createScript = function(id, src, onLoad) {
 			var s = document.createElement('script');
 			s.type = 'text/javascript';
+			if (id) {
+				s.id = id;
+			}
 			$('head').append(s);
 			if (onLoad) {
 				s.onload = onLoad;
@@ -46,7 +59,7 @@ com.oracle.bluekai = {
 		}
 
 		/**
-		 * Funtion to send user data to bluekai
+		 * Function to send user data to bluekai
 		 * 
 		 * @param data :
 		 *            A map of values to be sent to bluekai as phints.
@@ -60,16 +73,26 @@ com.oracle.bluekai = {
 								'<iframe name="__bkframe" height="0" width="0" frameborder="0" style="display:none;position:absolute;clip:rect(0px 0px 0px 0px)" src="about:blank"></iframe>');
 			}
 
-			// Adding phints to request
-			if (data) {
-				for (i in data) {
-					bk_addPageCtx(i, data[i]);
+			sendData(data);
+		}
+
+		var sendData = function(data) {
+			if (!bkputLoaded) {
+				setTimeout(function() {
+					sendData(data);
+				}, 3000);
+			} else {
+				// Adding phints to request
+				if (data) {
+					for (i in data) {
+						bk_addPageCtx(i, data[i]);
+					}
+
 				}
 
+				// sending data to bluekai
+				bk_doJSTag(siteId, limit);
 			}
-
-			// sending data to bluekai
-			bk_doJSTag(siteId, limit);
 		}
 
 		var populateUserCampaigns = function() {
@@ -88,6 +111,8 @@ com.oracle.bluekai = {
 
 			}
 		}
+
+		init();
 
 	}
 };
