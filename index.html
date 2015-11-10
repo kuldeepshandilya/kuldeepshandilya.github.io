@@ -54,6 +54,23 @@ ul, li {
 </style>
 
 <script>
+//render main page content immediately
+var mainArticleIndex = 0, arrayIndex = 0; timeToRefresh = 2000;
+var mainArticles = [ cricketArticles,tennisArticles ];
+function refreshMainImage()
+{
+  	var div = document.getElementById("home_output");
+  	var array = mainArticles[mainArticleIndex % 2];
+  	var article = array[arrayIndex % 5];
+  	div.innerHTML = "<img src="+article.image+" alt="+ article.image +" style='width: 600px; height: 400px;'"+" /> &nbsp;&nbsp;<a href='' onclick=renderArticle("+article+"); >"+article.title+"</a>";
+  	mainArticleIndex++;
+  	arrayIndex++;
+}
+	
+window.setInterval(refreshMainImage, timeToRefresh);
+
+
+
 var sportsInterested='none';
 var maxRecommend=6;
 var recommendations=["none"];
@@ -118,6 +135,7 @@ drawRecommendations(recommendedArticles, 'newsList','home_output');
 	index=index+1;
 	}
 	output.innerHTML="<h2>Headline News("+tabId+")</h2>";
+	
 	output.appendChild(ul);
  	}
  	
@@ -246,7 +264,9 @@ var li = document.createElement("li");
 				</tr>
 				<tr>
 					<td width="400px">
-					<div id="home_output"></div>
+					<div id="home_output" style="overflow: fixed;">
+					   
+					</div>
 					</td>
 
 					<td width="400px" align="center">
