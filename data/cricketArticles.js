@@ -59,8 +59,8 @@ var articleText = [
  */
 var cricketArticles = [
                        {'tags': [tags[0],tags[3]], 'title' : 'Sehwag scores double century', 'image': 'images/cricket/sehwag200.jpg', 'text' : articleText[0], 'author' : 'Hareesh Bhimani', 'date' : '1st June 2013'},
-                       {'tags': [tags[0],tags[1],tags[2]], 'title' : 'Sachin scores double century', 'image': 'images/cricket/sachin200.jpg', 'text' : articleText[1], 'author' : 'Pankaj Kapur', 'date' : '2nd April 2014'},
+                       {'tags': [tags[0],tags[2]], 'title' : 'Sachin scores double century', 'image': 'images/cricket/sachin200.jpg', 'text' : articleText[1], 'author' : 'Pankaj Kapur', 'date' : '2nd April 2014'},
                        {'tags': [tags[1]], 'title' : 'Cricket fever in USA', 'image': 'images/cricket/cricketUSA.jpg', 'text' : articleText[2], 'author' : 'Steve Brenner', 'date' : '9th November 2015'},
-                       {'tags': [tags[0],tags[4],tags[5]], 'title' : 'Don Bradman', 'image': 'images/cricket/bradman.jpg', 'text' : articleText[3], 'author' : 'Steve Brenner', 'date' : '9th November 2015'},
+                       {'tags': [tags[1],tags[4],tags[5]], 'title' : 'Don Bradman', 'image': 'images/cricket/bradman.jpg', 'text' : articleText[3], 'author' : 'Steve Brenner', 'date' : '9th November 2015'},
                        {'tags': [tags[0], tags[2],tags[5]], 'title' : 'Biography : Sachin', 'image': 'images/cricket/sachin.jpg', 'text' : articleText[4], 'author' : 'Suneel Wiki', 'date' : '9th November 2015'}
                        ]
