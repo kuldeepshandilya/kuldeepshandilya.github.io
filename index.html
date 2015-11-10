@@ -2,15 +2,25 @@
 <html lang="en">
 <head>
 <meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Sports Channel</title>
 <link rel="stylesheet"
 	href="http://code.jquery.com/ui/1.11.4/themes/blitzer/jquery-ui.css">
+	<link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
+
 <script src="http://code.jquery.com/jquery-1.10.2.js"></script>
 <script src="http://code.jquery.com/ui/1.11.4/jquery-ui.js"></script>
+<script src="data/cricketArticles.js"></script>
+<script src="data/tennisArticles.js"></script>
+<script src="data/footBallArticles.js"></script>
+<script src="data/basketBallArticles.js"></script>
+<script src="data/boxingArticles.js"></script>
+<script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
 <script src="jsAPI.js"></script>
+
 <style>
 #recommend {
-	width: 180px;
+	width: 380px;
 	height: 400px;
 }
 
@@ -23,7 +33,7 @@
 
 
 ul, li {
-	list-style: square;
+	list-style: none;
 	list-style-image: none;
 }
 
@@ -45,38 +55,42 @@ ul, li {
 
 <script>
 var sportsInterested='none';
-var maxRecommend=4;
+var maxRecommend=6;
 var recommendations=["none"];
-var categories=["none"];
+var sports=["none"];
+var countries=["none"];
 
 
-        //Initialize bluekai
-        var bkClient = new com.oracle.bluekai.Client(14455,1);
+// to post data use the following function
+var bkClient = new com.oracle.bluekai.Client(28755,1); // site id for sport channel
+bkClient.postUserData("");
 
-        bkClient.init(function(userCampaigns){console.log(userCampaigns);
-        for(i in userCampaigns){
-        console.log(i);
-        for(j in userCampaigns[i])
-        {
-        console.log(userCampaigns[i][j]);
-        if(userCampaigns[i][j]==3049) {
-        	if(categories.indexOf('cricket') ==-1) {
-        categories.push('cricket'); }
-        }
-        if(userCampaigns[i][j]==136) {
-        if(categories.indexOf('tennis') ==-1) {
-        	categories.push('tennis');
+// fetch user data
+bkClient.getUserData(function(userCampaigns) {
+var recommendedArticles;
+    console.log(userCampaigns);
+
+    if (null != userCampaigns[82058]) {
+        console.log('We are in india');
+     		   if(countries.indexOf('india') ==-1) {
+     		   	countries.push('india');
+     		   	console.log('Country added:india');
+     		   	recommendedArticles = setRecommendations('india');
+     		   	//call drawRecommendation passing in recomendation divid
         	}
-        }
-        }
-        }
-        });
+       
+    } else if (null != userCampaigns[82557]) {
+        console.log('we are in the US of A');
+        recommendedArticles = setRecommendations('usa');
+    } else {
+        console.log('Default is India!!!!');
+        recommendedArticles = setRecommendations('india');
+    }
+//call drawRecommendation passing in 'recommendedArticles' and recomendation divid
+drawRecommendations(recommendedArticles, 'newsList','home_output');
+});
 
-        //to post data use the following function
-        /*bkClient.postUserData({
-	    "key1" : "value1",
-	    "key2" : "value2"
-        });*/
+
 
 	$(function() {
 		$("#tabs").tabs();
@@ -84,51 +98,120 @@ var categories=["none"];
 	
 	
 	function getSelectedTab(tabId) {
-		sportsInterested=tabId;
-		if(sportsInterested!='none')
-		{
-		//var output = document.getElementById('output');
-		//output.innerHTML = 'I am interested in '+tabId+' Sports';
-		setRecommendations(sportsInterested);
+		renderArticles(tabId);
+	}
+	
+	function renderArticles(tabId) {
+	var articles;
+	var index=0;
+	var ul = document.createElement("ul");
+	var output = tabId+'_output';
+	var output = document.getElementById(output);
+	if(tabId=='cricket') {
+	articles=cricketArticles;
+	}
+	if(tabId=='tennis') {
+	articles=tennisArticles;
+	}
+	        
+	for (i in articles) {
+	console.log (articles[i]);
+	var articleId=tabId+index;
+	var articleLink="#"+articleId;
+
+	var li = document.createElement("li");
+	console.log("Output Type="+output);
+	li.innerHTML = "<a href=" +articleLink+ " data-toggle=collapse>"+articles[i].title+"</a> 	<div id="+articleId+" class=collapse> 	<table>	<tr><td width='200px' align='left'><img src="+articles[i].image+" alt="+ articles[i].image +" style='width: 180px; height: 170px;'"+" /></td>	<td width='800px' align='top'>"+articles[i].text+"</td>	</tr>	<tr><br></tr>	<tr>		<td>Author</td>	<td><i>"+articles[i].author+"</td>		</tr>	<tr>		<td>Date Published</td>	<td><i>"+articles[i].date+"</td>		</tr>	</table>		</div>";
+	ul.appendChild(li);
+	index=index+1;
+	}
+	output.innerHTML="<h2>Headline News("+tabId+")</h2>";
+	output.appendChild(ul);
+ 	}
+ 	
+ 	function renderArticle(article) {
+ 	var divId = document.getElementById('home_output');
+ 	divId.innerHTML = "<table>	<tr><td width='200px' align='left'><img src="+article.image+" alt="+ article.image +" style='width: 180px; height: 170px;'"+" /></td>	<td width='800px' align='top'>"+article.text+"</td>	</tr>	<tr><br></tr>	<tr>		<td>Author</td>	<td><i>"+article.author+"</td>		</tr>	<tr>		<td>Date Published</td>	<td><i>"+article.date+"</td>		</tr>	</table>		</div>";
+		
+ 	}
+ 	
+ 	function matchTags(tag,articles,recommendList) {
+ 				for (i in articles) {
+			tags=articles[i].tags;
+			console.log (articles[i]);
+			console.log ("Tags:"+tags[0]);
+				if(tag==tags[0]) {
+				recommendList.push(articles[i]);
+				
+				}
+	}
+ 	return recommendList;
+ 	}
+ 	/**
+ 	* expect interest = 'india' or 'usa'
+ 	 for given 'interest' value, loop through relevant articles and match for tag value in articles with 'interest' value.
+ 	 Those which match are the ones that will show up in recommendation(if it is home page). If it is tabId page(cricket),
+ 	*/
+	function setRecommendations(interest,articles) {
+	var recommendedArticles=[];
+	
+	var tags;
+	//for home page, articles will not be sent. loop through all article arrays
+	if(!articles)
+	{
+		recommendedArticles=matchTags(interest,cricketArticles,recommendedArticles);
+		recommendedArticles=matchTags(interest,tennisArticles,recommendedArticles);
+		//recommendedArticles=matchTags(interest,footBallArticles,recommendedArticles);
+
+	
+	 // For each article array(i.e. cricketArticles, TennisArticels etc)
+	 // For each object in the array(each cricket Article)
+	 // get tag array, compare interest value with tags in the tag array
+	 //if matched, add array[i] to  recommendedArticles
+	 //return recommendedArticles;
+	}
+	else
+	{
+	//LATER
+	}
+	return recommendedArticles;
+	}
+	
+	function drawRecommendations(recommendedArticles, divId,displayDivId)
+	{
+		var ul = document.getElementById(divId);
+		addEmptyLine(ul);
+		for (i in recommendedArticles) {
+			console.log ('Recommended Articles:'+recommendedArticles[i].title);
+			console.log ('Tag Articles:'+recommendedArticles[i].tags[0]);
+			addArticle(recommendedArticles[i],ul,displayDivId);
+			addEmptyLine(ul);
 		}
 	}
 	
-	function setRecommendations(interest) {
-	
-	if(recommendations.length < maxRecommend ) {
-	// Add to connect BlueKai
-	// Get visitor/user recommendations , accordingly calculate the sports in Interest
-	for (i in categories) {
-	imageReveal(categories[i]);
-	console.log ('Items:'+categories[i]);
-	}
-		imageReveal(interest);
-	}
-	
-	
-	}
-	
-	function imageReveal(sports) {
-                var ul = document.getElementById("listItUp");
-                if(sports=='cricket') {
-                addImage('shoes.jpg',ul);
-                addImage('cricketbat.jpg',ul);
-                }
-                if(sports=='tennis') {
-                addImage('shoes.jpg',ul);
-                addImage('tennisracquet.jpg',ul);
-                }
-         }
-        
-        function addImage(image,ul) {
-        if(recommendations.indexOf(image) ==-1) {
-	        var li = document.createElement("li");
-	        li.innerHTML = "<img src="+image+" alt="+ image +" style='width: 80px; height: 70px;'"+" />";
-	        ul.appendChild(li);
-	        recommendations.push(image);
-        }
-        }
 
+        
+     function addArticle(article,ul,displayDiv) {
+       
+        if(recommendations.indexOf(location) ==-1) {
+	        var li = document.createElement("li");
+	        li.innerHTML = "<img src="+article.image+" alt="+ article.image +" style='width: 30px; height: 20px;'"+" /> &nbsp;&nbsp;<a href='' onclick=renderArticle("+article+"); >"+article.title+"</a>";
+	        ul.appendChild(li);
+	        recommendations.push(article.image);
+        }
+        }
+        
+function addEmptyLine(ul) {
+var li = document.createElement("li");
+	        li.innerHTML = "<br>";
+	        ul.appendChild(li);
+}
+
+</script>
+<script>
+  $(function() {
+    $( "#accordion" ).accordion();
+  });
 </script>
 
 </head>
@@ -137,10 +220,11 @@ var categories=["none"];
 <table>
 <tr>
 <td width="504px" height="108px">
-	<img src="banner.jpg" alt="Sports Channel"
+	<img src="images/banner/banner.jpg" alt="Sports Channel"
 		style="width: 504px; height: 108px;">
 </td>
 <td width="900px" align="center">	
+<!--  
 	<marquee behavior="scroll" direction="up" scrollamount="2" height="108"
 		width="300">
 		<img src="channelname.jpg" alt="New Channel" style="width: 104px;"
@@ -167,14 +251,10 @@ var categories=["none"];
 			src="pond-skim.jpg" alt="Pond Skim"
 			style="width: 290px; height: 108px;"> <img src="freeride.jpg"
 			alt="Freeride" style="width: 290px; height: 108px;">
-	</marquee></td>
+	</marquee>
+	--></td>
 </tr>
 </table>
-
-
-
-
-	
 
 	</div>
 
@@ -184,16 +264,8 @@ var categories=["none"];
 			<li><a href="#cricketTab" onclick="getSelectedTab('cricket')">Cricket</a></li>
 			<li><a href="#tennisTab" onclick="getSelectedTab('tennis')">Tennis</a></li>
 			<li><a href="#footBallTab" onclick="getSelectedTab('football')">Football</a></li>
-			<li><a href="#baseBallTab" onclick="getSelectedTab('baseball')">Baseball</a></li>
 			<li><a href="#basketBallTab" onclick="getSelectedTab('basketball')">Basketball</a></li>
-			<li><a href="#hockeyTab" onclick="getSelectedTab('hockey')">Hockey</a></li>
-			<li><a href="#volleyBallTab" onclick="getSelectedTab('volleyball')">Volleyball</a></li>
 			<li><a href="#boxingTab" onclick="getSelectedTab('boxing')">Boxing</a></li>
-			<li><a href="#badmintonTab" onclick="getSelectedTab('badminton')">Badminton</a></li>
-			<li><a href="#golfTab" onclick="getSelectedTab('golf')">Golf</a></li>
-			<li><a href="#cyclingTab" onclick="getSelectedTab('cycling')">Cycling</a></li>
-			<li><a href="#athleticsTab" onclick="getSelectedTab('athletics')">Athletics</a></li>
-			<li><a href="#othersTab" onclick="getSelectedTab('none')">Others</a></li>
 
 		</ul>
 
@@ -201,56 +273,32 @@ var categories=["none"];
 			<table>
 				<tr>
 					<th align="left" width="1020px">Headline News</th>
-					<th align="right" width="400px">Recommendations</th>
+					<th align="center" width="400px">Recommendations</th>
 				</tr>
 				<tr>
-					<td width="400px"><ul>
-							<li>Sky Sports News TOTH - 9pm - Wednesday 15th January 2014
-								<br> <iframe width="560" height="315"
-									src="https://www.youtube.com/embed/N0kWrhkwA8Q" frameborder="0"
-									allowfullscreen></iframe>
+					<td width="400px">
+					<div id="home_output"></div>
+					</td>
 
-							</li>
-						</ul></td>
-
-					<td width="400px" align="right">
-						<div id="recommend" class="ui-widget-content" align="right" >
-						<ul id="listItUp"></ul>
-						
+					<td width="400px" align="center">
+						<div id="recommend" class="ui-widget-content" align="left" >
+						<ul id="newsList"></ul>
 						
 						</div>
 					</td>
 				</tr>
 			</table>
 
-
-
 		</div>
 		<div id="cricketTab">
-			<ul>
-				<li>
-					<p>10 Players to Watch in ICC Cricket World Cup 2015</p> <iframe
-						width="560" height="315"
-						src="https://www.youtube.com/embed/5mmb66YMU_g" frameborder="0"
-						allowfullscreen></iframe>
-				</li>
-			</ul>
+			<div id="cricket_output"></div>
 		</div>
 		<div id="tennisTab">
-			<p>I am in Tennis.</p>
+			<div id="tennis_output"> </div>
+
 		</div>
 		<div id="footBallTab">
-			<ul>
-				<li>
-					<p>FINAL HIGHLIGHTS: USA v. Japan - FIFA Women's World Cup 2015</p>
-					<iframe width="560" height="315"
-						src="https://www.youtube.com/embed/MCG2ycuoOg4" frameborder="0"
-						allowfullscreen></iframe>
-				</li>
-			</ul>
-		</div>
-		<div id="baseBallTab">
-			<p>I am in BaseBall.</p>
+
 		</div>
 		<div id="basketBallTab">
 			<p>
@@ -259,32 +307,12 @@ var categories=["none"];
 			</p>
 
 		</div>
-		<div id="hockeyTab">
-			<p>I am in Hockey.</p>
-		</div>
-		<div id="volleyBallTab">
-			<p>I am in Volley Ball.</p>
-		</div>
+
 		<div id="boxingTab">
 			<p>I am in Boxing.</p>
 		</div>
-		<div id="badmintonTab">
-			<p>I am in Badminton.</p>
-		</div>
-		<div id="golfTab">
-			<p>I am in Golf.</p>
-		</div>
-		<div id="cyclingTab">
-			<p>I am in Cycling.</p>
-		</div>
-		<div id="athleticsTab">
-			<p>I am in Athletics.</p>
-		</div>
-		<div id="othersTab">
-			<p>I am in Others.</p>
-		</div>
 	</div>
-	
+	</div>
 	<div id="footer">
 Copyright © SportsChannel.com
 </div>
