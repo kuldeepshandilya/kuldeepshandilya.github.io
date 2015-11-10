@@ -81,8 +81,8 @@ var articleText = [
  */
 var tennisArticles = [
                        {'tags': [tags[1],tags[2]], 'title' : 'Maria Sharapova', 'image': 'images/tennis/mariasharapova.jpg', 'text' : articleText[0], 'author' : 'Hareesh Bhimani', 'date' : '1st June 2013'},
-                       {'tags': [tags[1],tags[1],tags[2]], 'title' : 'Wimbledon 2014 final', 'image': 'images/tennis/wimbledonfinal.jpg', 'text' : articleText[1], 'author' : 'Pankaj Kapur', 'date' : '2nd April 2014'},
-                       {'tags': [tags[0]], 'title' : 'US Mixed Doubles final 2015', 'image': 'images/tennis/USdoublesfinal.jpg', 'text' : articleText[2], 'author' : 'Steve Brenner', 'date' : '9th November 2015'},
+                       {'tags': [tags[1],tags[2]], 'title' : 'Wimbledon 2014 final', 'image': 'images/tennis/wimbledonfinal.jpg', 'text' : articleText[1], 'author' : 'Pankaj Kapur', 'date' : '2nd April 2014'},
+                       {'tags': [tags[1]], 'title' : 'US Mixed Doubles final 2015', 'image': 'images/tennis/USdoublesfinal.jpg', 'text' : articleText[2], 'author' : 'Steve Brenner', 'date' : '9th November 2015'},
                        {'tags': [tags[1],tags[4],tags[5]], 'title' : 'Australian Open 2015', 'image': 'images/tennis/australianopen2015.jpg', 'text' : articleText[3], 'author' : 'Steve Brenner', 'date' : '9th November 2015'},
                        {'tags': [tags[0],tags[1], tags[3],tags[5]], 'title' : 'Biography : Boris Becker', 'image': 'images/tennis/boris.jpg', 'text' : articleText[4], 'author' : 'Suneel Wiki', 'date' : '9th November 2015'}
                        ]
