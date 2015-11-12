@@ -69,6 +69,8 @@ function refreshMainImage()
 	
 window.setInterval(refreshMainImage, timeToRefresh);
 
+
+
 var sportsInterested='none';
 var maxRecommend=6;
 var recommendations=["none"];
@@ -195,7 +197,6 @@ recommendedList - list into which recommendations to append to
 	function drawRecommendations(recommendedArticles, divId,displayDivId)
 	{
 		var ul = document.getElementById(divId);
-		ul.innerHTML="";
 		addEmptyLine(ul);
 		for (i in recommendedArticles) {
 			addArticle(recommendedArticles[i],ul,displayDivId);
@@ -206,10 +207,13 @@ recommendedList - list into which recommendations to append to
 
         
      function addArticle(article,ul,displayDiv) {
+       
+        if(recommendations.indexOf(location) ==-1) {
 	        var li = document.createElement("li");
 	        li.innerHTML = "<img src="+article.image+" alt="+ article.image +" style='width: 30px; height: 20px;'"+" /> &nbsp;&nbsp;<a href='' onclick=renderArticle("+article+"); >"+article.title+"</a>";
 	        ul.appendChild(li);
 	        recommendations.push(article.image);
+        }
         }
         
 function addEmptyLine(ul) {
@@ -260,8 +264,9 @@ var li = document.createElement("li");
 				</tr>
 				<tr>
 					<td width="400px">
-					<div id="home_output" style="overflow: fixed;" ></div>
-					
+					<div id="home_output" style="overflow: fixed;">
+					   
+					</div>
 					</td>
 
 					<td width="400px" align="center">
@@ -269,14 +274,6 @@ var li = document.createElement("li");
 						<ul id="newsList"></ul>
 						
 						</div>
-						
-					<script>
-					//render india specific recommendations(default) in case Bluekai call is blocked by any ad-blocker in web - browser
-					if(document.getElementById("home_output").innerHTML == "") {
-					     var defaultRecommendedArticles = setRecommendations('india');
-					     drawRecommendations(defaultRecommendedArticles, 'newsList','home_output');
-						}
-					</script>
 					</td>
 				</tr>
 			</table>
@@ -308,7 +305,6 @@ var li = document.createElement("li");
 	<div id="footer">
 Copyright © SportsChannel.com
 </div>
-
 </body>
 
 </html>
