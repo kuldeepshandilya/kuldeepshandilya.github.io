@@ -78,7 +78,7 @@ var countries=["none"];
 
 // to post data use the following function
 var bkClient = new com.oracle.bluekai.Client(28755,1); // site id for sport channel
-bkClient.postUserData("");
+bkClient.postUserData({'vc':'cricket'});
 
 // fetch user data
 bkClient.getUserData(function(userCampaigns) {
